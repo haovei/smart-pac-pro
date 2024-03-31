@@ -9,9 +9,7 @@ import (
 )
 
 func main() {
-	app := fiber.New(fiber.Config{
-		ETag: true,
-	})
+	app := fiber.New()
 	app.Use(func(c *fiber.Ctx) error {
 		log.Println(c.Method(), c.Path())
 		return c.Next()
