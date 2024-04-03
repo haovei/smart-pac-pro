@@ -2,7 +2,7 @@ FROM golang:alpine as builder
 RUN mkdir /build
 COPY . /build/
 WORKDIR /build
-RUN CGO_ENABLED=0 go build -ldflags="-s -w" -o main .
+RUN go build -ldflags="-s -w" -o main .
 
 FROM alpine
 # RUN apk add tzdata

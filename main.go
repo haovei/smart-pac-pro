@@ -6,18 +6,26 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/template/html/v2"
 )
 
 func main() {
-	app := fiber.New()
+	engine := html.New("./config", ".pac")
+
+	app := fiber.New(fiber.Config{
+		Views: engine,
+	})
 	app.Use(func(c *fiber.Ctx) error {
 		log.Println(c.Method(), c.Path())
 		return c.Next()
 	})
 	app.Static("/", "./public")
 	app.Get("/auto.pac", func(c *fiber.Ctx) error {
+		response := c.Render("template", fiber.Map{
+			"HostConfig": "{ hosts: [], rules: [] }",
+		})
 		c.Response().Header.Set("Content-Type", "application/x-ns-proxy-autoconfig")
-		return c.SendString("auto.pac")
+		return response
 	})
 
 	// API
